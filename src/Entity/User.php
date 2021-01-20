@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -14,41 +15,55 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"users-list:read", "user:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180)
+     * @Groups({"users-list:read", "user:read", "shop:read"})
      */
     private $email;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Shop::class, inversedBy="users", cascade={"persist"}))
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $shop;
+
+    /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users-list:read", "user:read", "shop:read"})
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users-list:read", "user:read", "shop:read"})
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:read"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"user:read"})
      */
     private $postal_code;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"user:read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user:read"})
      */
     private $created_at;
 
@@ -65,6 +80,18 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getShop(): ?Shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(?Shop $shop): self
+    {
+        $this->shop = $shop;
 
         return $this;
     }
