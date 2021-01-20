@@ -26,12 +26,6 @@ class User
     private $email;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Shop::class, inversedBy="users", cascade={"persist"}))
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $shop;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users-list:read", "user:read", "shop:read"})
      */
@@ -67,6 +61,12 @@ class User
      */
     private $created_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Shop::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $shop;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,18 +80,6 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getShop(): ?Shop
-    {
-        return $this->shop;
-    }
-
-    public function setShop(?Shop $shop): self
-    {
-        $this->shop = $shop;
 
         return $this;
     }
@@ -164,6 +152,18 @@ class User
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getShop(): ?Shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(?Shop $shop): self
+    {
+        $this->shop = $shop;
 
         return $this;
     }
