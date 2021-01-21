@@ -18,13 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PhoneController extends AbstractController
 {
     /**
-     *  @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"})
+     *  @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"}, priority= -1)
      */
     public function listPhone(Request $request,PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
         $page = $request->query->get('page');
         $limit = 5;
-
         $phones = $phoneRepository->findAllPhones($page, $limit);
         $data = $serializer->serialize($phones, 'json',['groups' => 'phone:read']);
         $response = new JsonResponse($data, 200, [], true);

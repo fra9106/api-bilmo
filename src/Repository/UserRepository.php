@@ -22,7 +22,7 @@ class UserRepository extends ServiceEntityRepository
 
     public function findAllUsers($page, $limit)
     {
-        $query = $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('u')
             ->getQuery()
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);

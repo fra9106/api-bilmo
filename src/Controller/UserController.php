@@ -15,19 +15,18 @@ use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\Serializer\Serializer;
 
 /**
- * @Route("/api")
+ * @Route("/api/users")
  */
 
 class UserController extends AbstractController
 {
     /**
-     *  @Route("/{page<\d+>?1}", name="list_users", methods={"GET"})
+     *  @Route("/{page<\d+>?1}", name="list_users", methods={"GET"}, priority= -1)
      */
     public function listUser(Request $request, UserRepository $userRepository, SerializerInterface $serializer)
     {
         $page = $request->query->get('page');
         $limit = 5;
-
         $users = $userRepository->findAllUsers($page, $limit);
         $data = $serializer->serialize($users, 'json', ['groups' => 'users-list:read']);
         $response = new JsonResponse($data, 200, [], true);
@@ -36,7 +35,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}", name="show_user", methods={"GET"})
+     * @Route("/{id}", name="show_user", methods={"GET"})
      */
     public function showUser(User $user, UserRepository $userRepository, SerializerInterface $serializer)
     {
