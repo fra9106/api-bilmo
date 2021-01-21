@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController extends AbstractController
 {
     /**
-     *  @Route("/users", name="list_users", methods={"GET"})
+     *  @Route("/{page<\d+>?1}", name="list_users", methods={"GET"})
      */
     public function listUser(Request $request, UserRepository $userRepository, SerializerInterface $serializer)
     {
