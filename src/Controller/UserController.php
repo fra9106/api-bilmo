@@ -47,7 +47,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users", name="add_user", methods={"POST"})
+     * @Route("/", name="add_user", methods={"POST"})
      */
     public function addUser(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
     {
@@ -68,10 +68,11 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}", name="delete_user", methods={"DELETE"})
+     * @Route("/{id}", name="delete_user", methods={"DELETE"})
      */
     public function deleteUser(User $user, EntityManagerInterface $em)
     {
+        $this->denyAccessUnlessGranted('CAN_DELETE', $user, "Vous n'êtes pas autorisé à supprimer cet utilisateur");
         $em->remove($user);
         $em->flush();
         return new Response(null, 204);
