@@ -12,10 +12,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
-    /*public function __construct(UserPasswordEncoderInterface $encoder )
+    public function __construct(UserPasswordEncoderInterface $encoder )
     {
         $this->encoder = $encoder;
-    }*/
+    }
     
     private $model = ['iPhone', 'Samsung'];
     private $color = ['black', 'white', 'night green', 'or', 'red', 'blue', 'argent', 'graphite', 'sideral grey'];
@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
     
     public function load(ObjectManager $manager)
     {
-        /*$faker = Factory::create('fr_FR');
+        $faker = Factory::create('fr_FR');
         
         $shop = new Shop();
         $password = $this->encoder->encodePassword($shop,'toto');
@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
         ->setPassword($password)
         ->setAddress($faker->streetAddress())
         ->setCity($faker->city())
-        ->setArrivalDate(new \DateTime());*/
+        ->setArrivalDate(new \DateTime());
         
         for($i = 1; $i <= 20; $i++) {
             $phone = new Phone();
@@ -44,13 +44,11 @@ class AppFixtures extends Fixture
             $manager->persist($phone);
         }
         
-        /*for ( $u = 0; $u < 20; $u++){
+        for ( $u = 0; $u < 20; $u++){
             $user = new User();
-            $password = $this->encoder->encodePassword($user,'toto');
             $user->setEmail("user$u@gmail.com")
             ->setFirstName($faker->firstNameMale())
             ->setLastName($faker->lastName())
-            ->setPassword($password)
             ->setAddress($faker->streetAddress())
             ->setPostalCode($faker->postcode())
             ->setCity($faker->city())
@@ -58,7 +56,7 @@ class AppFixtures extends Fixture
             ->setShop($shop);
             
             $manager->persist($user);
-        }*/
+        }
         
         $manager->flush();
     }

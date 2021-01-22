@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Phone;
 use App\Repository\PhoneRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,11 +18,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PhoneController extends AbstractController
 {
     /**
-     *  @Route("/", name="list_phone", methods={"GET"})
+     *  @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"}, priority= -1)
      */
-    public function listPhone(PhoneRepository $phoneRepository, SerializerInterface $serializer)
+    public function listPhone(Request $request,PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
-        $phones = $phoneRepository->findAll();
+        $page = $request->query->get('page');
+        $limit = 5;
+        $phones = $phoneRepository->findAllPhones($page, $limit);
         $data = $serializer->serialize($phones, 'json',['groups' => 'phone:read']);
         $response = new JsonResponse($data, 200, [], true);
 
