@@ -47,14 +47,15 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/", name="add_user", methods={"POST"})
+     * @Route("/add", name="add_user", methods={"POST"})
      */
     public function addUser(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
     {
         $json = $request->getContent();
-    
+        $userConnected = $this->getUser();
         $newUser = $serializer->deserialize($json, User::class, 'json');
         $newUser->setCreatedAt(new DateTime());
+        $newUser->setShop($userConnected);
         
         $em->persist($newUser);
         $em->flush();

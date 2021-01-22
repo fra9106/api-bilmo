@@ -28,7 +28,28 @@ class AppFixtures extends Fixture
         $shop = new Shop();
         $password = $this->encoder->encodePassword($shop,'toto');
         $shop->setName("La boutique a toto")
-        ->setEmail("Shop@gmail.com")
+        ->setEmail("totoshop@gmail.com")
+        ->setRoles(['ROLE_ADMIN'])
+        ->setPassword($password)
+        ->setAddress($faker->streetAddress())
+        ->setCity($faker->city())
+        ->setArrivalDate(new \DateTime());
+        
+        $shop1 = new Shop();
+        $password = $this->encoder->encodePassword($shop1,'titi');
+        $shop1->setName("La boutique a titi")
+        ->setEmail("titishop1@gmail.com")
+        ->setRoles(['ROLE_USER'])
+        ->setPassword($password)
+        ->setAddress($faker->streetAddress())
+        ->setCity($faker->city())
+        ->setArrivalDate(new \DateTime());
+        
+        $shop2 = new Shop();
+        $password = $this->encoder->encodePassword($shop2,'tata');
+        $shop2->setName("La boutique a tata")
+        ->setEmail("tatashop@gmail.com")
+        ->setRoles(['ROLE_USER'])
         ->setPassword($password)
         ->setAddress($faker->streetAddress())
         ->setCity($faker->city())
@@ -44,7 +65,7 @@ class AppFixtures extends Fixture
             $manager->persist($phone);
         }
         
-        for ( $u = 0; $u < 20; $u++){
+        for ( $u = 0; $u < 10; $u++){
             $user = new User();
             $user->setEmail("user$u@gmail.com")
             ->setFirstName($faker->firstNameMale())
@@ -54,6 +75,34 @@ class AppFixtures extends Fixture
             ->setCity($faker->city())
             ->setCreatedAt(new \DateTime())
             ->setShop($shop);
+            
+            $manager->persist($user);
+        }
+        
+        for ( $u = 0; $u < 8; $u++){
+            $user = new User();
+            $user->setEmail("user$u@gmail.com")
+            ->setFirstName($faker->firstNameMale())
+            ->setLastName($faker->lastName())
+            ->setAddress($faker->streetAddress())
+            ->setPostalCode($faker->postcode())
+            ->setCity($faker->city())
+            ->setCreatedAt(new \DateTime())
+            ->setShop($shop1);
+            
+            $manager->persist($user);
+        }
+        
+        for ( $u = 0; $u < 8; $u++){
+            $user = new User();
+            $user->setEmail("user$u@gmail.com")
+            ->setFirstName($faker->firstNameMale())
+            ->setLastName($faker->lastName())
+            ->setAddress($faker->streetAddress())
+            ->setPostalCode($faker->postcode())
+            ->setCity($faker->city())
+            ->setCreatedAt(new \DateTime())
+            ->setShop($shop2);
             
             $manager->persist($user);
         }
