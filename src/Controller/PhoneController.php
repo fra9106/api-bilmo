@@ -48,7 +48,7 @@ class PhoneController extends AbstractController
 
     /**
      * @Route("/{id}", name="update_phone", methods={"PUT"})
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour modifier ce produit !")
      */
     public function updatePhone(Phone $phone, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $em)
     {
