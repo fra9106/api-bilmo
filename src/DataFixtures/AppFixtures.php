@@ -67,7 +67,7 @@ class AppFixtures extends Fixture
         
         for ( $u = 0; $u < 10; $u++){
             $user = new User();
-            $user->setEmail("user$u@gmail.com")
+            $user->setEmail("user$u@orange.fr")
             ->setFirstName($faker->firstNameMale())
             ->setLastName($faker->lastName())
             ->setAddress($faker->streetAddress())
@@ -79,9 +79,9 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         
-        for ( $u = 0; $u < 8; $u++){
+        for ( $u = 0; $u < 5; $u++){
             $user = new User();
-            $user->setEmail("user$u@gmail.com")
+            $user->setEmail("user$u@sfr.fr")
             ->setFirstName($faker->firstNameMale())
             ->setLastName($faker->lastName())
             ->setAddress($faker->streetAddress())
@@ -93,9 +93,9 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         
-        for ( $u = 0; $u < 8; $u++){
+        for ( $u = 0; $u < 5; $u++){
             $user = new User();
-            $user->setEmail("user$u@gmail.com")
+            $user->setEmail("user$u@free.fr")
             ->setFirstName($faker->firstNameMale())
             ->setLastName($faker->lastName())
             ->setAddress($faker->streetAddress())

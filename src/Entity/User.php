@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity("email", message="email déjà utilisé !")
  */
 class User
 {
@@ -22,36 +25,48 @@ class User
     /**
      * @ORM\Column(type="string", length=180)
      * @Groups({"users-list:read", "user:read", "shop:read"})
+     * @Assert\NotBlank(message=" Merci d'entrer votre email !")
+     * @Assert\Email(message="email non valide !")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users-list:read", "user:read", "shop:read"})
+     * @Assert\NotBlank(message=" Merci d'entrer votre prénom !")
+     * @Assert\Length(min=4, max=255, minMessage="Votre prénom doit comporter plus de 4 caractères !")
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users-list:read", "user:read", "shop:read"})
+     * @Assert\NotBlank(message=" Merci d'entrer votre nom !")
+     * @Assert\Length(min=4, max=255, minMessage="Votre nom doit comporter plus de 4 caractères !")
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user:read"})
+     * @Assert\NotBlank(message=" Merci d'entrer votre adresse !")
+     * @Assert\Length(min=4, max=255, minMessage="Votre adresse doit comporter plus de 10 caractères !")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"user:read"})
+     * @Assert\NotBlank(message=" Merci d'entrer votre code postal !")
+     * @Assert\Length(min=4, max=255, minMessage="Votre code postal doit comporter plus de 4 caractères !")
      */
     private $postal_code;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"user:read"})
+     * @Assert\NotBlank(message=" Merci d'entrer le nom de votre ville !")
+     * @Assert\Length(min=4, max=255, minMessage="Le nom de votre ville doit comporter plus de 3 caractères !")
      */
     private $city;
 
