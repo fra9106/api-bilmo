@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 /**
  * @Route("/api/phones")
@@ -45,6 +46,41 @@ class PhoneController extends AbstractController
 
         return $response;
     }
+
+    /**
+    * @Route("/addphone", name="add_phone", methods={"POST"})
+    */
+    public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator)
+    {
+        $json = $request->getContent();
+        try {
+            $newPhone = $serializer->deserialize($json, Phone::class, 'json');
+            
+            $error = $validator->validate($newPhone);
+            
+            if (count($error) > 0) {
+                return  $this->json($error, 400);
+            }
+            
+            $em->persist($newPhone);
+            $em->flush();
+            
+            $newUser = [
+                'status' => 201,
+                'message' => 'Le nouveau produit a bien été ajouté !'
+            ];
+            
+            return $this->json($newUser, 201, [], [ 
+                'groups' => 'phone:read'
+                ]);
+                
+            }catch(NotEncodableValueException $e ) {
+                return $this->json([
+                    'status' => 400,
+                    'message' => $e->getMessage() 
+                ],400);
+            }
+        }
 
     /**
      * @Route("/{id}", name="update_phone", methods={"PUT"})
