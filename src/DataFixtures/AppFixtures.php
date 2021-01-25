@@ -38,7 +38,7 @@ class AppFixtures extends Fixture
         $shop1 = new Shop();
         $password = $this->encoder->encodePassword($shop1,'titi');
         $shop1->setName("La boutique a titi")
-        ->setEmail("titishop1@gmail.com")
+        ->setEmail("titishop@gmail.com")
         ->setRoles(['ROLE_USER'])
         ->setPassword($password)
         ->setAddress($faker->streetAddress())

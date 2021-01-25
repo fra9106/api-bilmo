@@ -49,6 +49,7 @@ class PhoneController extends AbstractController
 
     /**
     * @Route("/addphone", name="add_phone", methods={"POST"})
+    * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour ajouter un produit !")
     */
     public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator)
     {
@@ -112,4 +113,15 @@ class PhoneController extends AbstractController
         ];
         return new JsonResponse($data);
     }
+
+    /**
+        * @Route("/{id}", name="delete_phone", methods={"DELETE"})
+        * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour supprimer ce produit !")
+        */
+        public function deletePhone(Phone $phone, EntityManagerInterface $em, ValidatorInterface $validator)
+        {
+            $em->remove($phone);
+            $em->flush();
+            return new Response(null, 204);
+        }
 }
