@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity("email", message="email déjà utilisé !")
+ * @OA\Schema()
  */
 class User
 {
@@ -19,6 +21,8 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"users-list:read", "user:read"})
+     * @OA\Property(type="integer")
+     * @var int
      */
     private $id;
 
@@ -27,6 +31,8 @@ class User
      * @Groups({"users-list:read", "user:read", "shop:read"})
      * @Assert\NotBlank(message=" Merci d'entrer votre email !")
      * @Assert\Email(message="email non valide !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $email;
 
@@ -35,6 +41,8 @@ class User
      * @Groups({"users-list:read", "user:read", "shop:read"})
      * @Assert\NotBlank(message=" Merci d'entrer votre prénom !")
      * @Assert\Length(min=4, max=255, minMessage="Votre prénom doit comporter plus de 4 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $first_name;
 
@@ -43,6 +51,8 @@ class User
      * @Groups({"users-list:read", "user:read", "shop:read"})
      * @Assert\NotBlank(message=" Merci d'entrer votre nom !")
      * @Assert\Length(min=4, max=255, minMessage="Votre nom doit comporter plus de 4 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $last_name;
 
@@ -51,6 +61,8 @@ class User
      * @Groups({"user:read"})
      * @Assert\NotBlank(message=" Merci d'entrer votre adresse !")
      * @Assert\Length(min=4, max=255, minMessage="Votre adresse doit comporter plus de 10 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $address;
 
@@ -59,6 +71,8 @@ class User
      * @Groups({"user:read"})
      * @Assert\NotBlank(message=" Merci d'entrer votre code postal !")
      * @Assert\Length(min=4, max=255, minMessage="Votre code postal doit comporter plus de 4 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $postal_code;
 
@@ -67,12 +81,16 @@ class User
      * @Groups({"user:read"})
      * @Assert\NotBlank(message=" Merci d'entrer le nom de votre ville !")
      * @Assert\Length(min=4, max=255, minMessage="Le nom de votre ville doit comporter plus de 3 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $city;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"user:read"})
+     * @OA\Property(type="string", format="date-time")
+     * @var DateTimeInterface
      */
     private $created_at;
 

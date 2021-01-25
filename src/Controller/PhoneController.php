@@ -26,10 +26,11 @@ class PhoneController extends AbstractController
      * @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"}, priority= -1)
      * @OA\Get(
      *     path="/phones",
+     *     security={"bearer"},
      *     @OA\Parameter(
      *        name="page",
      *     in="query",
-     *     description="Liste phone (5 par page)",
+     *     description="Liste des produits (5 par page)",
      *     required=false,
      *     @OA\Schema(type="integer")
      *      ),
@@ -55,16 +56,17 @@ class PhoneController extends AbstractController
      * @Route("/{id}", name="show_phone", methods={"GET"})
      * @OA\Get(
      *     path="/phones/{id}",
+     *     security={"bearer"},
      *     @OA\Parameter(
      *        name="id",
      *     in="path",
-     *     description="Id de la ressource",
+     *     description="Id du produit",
      *     required=true,
      *     @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response="200",
-     *          description="Affiche un produit par son id",
+     *          description="Affichage d'un produit par son id",
      *          @OA\JsonContent(ref="#/components/schemas/Phone"),
      *      )
      * )
@@ -82,14 +84,14 @@ class PhoneController extends AbstractController
     * @Route("/addphone", name="add_phone", methods={"POST"})
     * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour ajouter un produit !")
     * @OA\Post(
-     *     path="/phones",
-     *     security={"bearer"},
-     *     @OA\Response(
-     *          response="201",
-     *          description="Creation d'un produit",
-     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
-     *     )
-     * )
+    *     path="/phones",
+    *     security={"bearer"},
+    *     @OA\Response(
+    *          response="201",
+    *          description="Création d'un produit",
+    *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+    *     )
+    * )
     */
     public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
@@ -171,9 +173,9 @@ class PhoneController extends AbstractController
     }
 
     /**
-        * @Route("/{id}", name="delete_phone", methods={"DELETE"})
-        * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour supprimer ce produit !")
-        * @OA\Delete (
+     * @Route("/{id}", name="delete_phone", methods={"DELETE"})
+     * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour supprimer ce produit !")
+     * @OA\Delete (
      *     path="/phones",
      *     security={"bearer"},
      *     @OA\Response(
@@ -183,10 +185,10 @@ class PhoneController extends AbstractController
      *     )
      * )
         */
-        public function deletePhone(Phone $phone, EntityManagerInterface $entityManager)
-        {
-            $entityManager->remove($phone);
-            $entityManager->flush();
-            return new Response(null, 204);
-        }
+    public function deletePhone(Phone $phone, EntityManagerInterface $entityManager)
+    {
+        $entityManager->remove($phone);
+        $entityManager->flush();
+        return new Response(null, 204);
+    }
 }

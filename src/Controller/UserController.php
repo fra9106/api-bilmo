@@ -22,7 +22,23 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserController extends AbstractController
 {
     /**
-    *  @Route("/{page<\d+>?1}", name="list_users", methods={"GET"}, priority= -1)
+    * @Route("/{page<\d+>?1}", name="list_users", methods={"GET"}, priority= -1)
+    * @OA\Get(
+    *     path="/users",
+    *     security={"bearer"},
+    *     @OA\Parameter(
+    *        name="page",
+    *     in="query",
+    *     description="Liste des utilisateurs (5 par page)",
+    *     required=false,
+    *     @OA\Schema(type="integer")
+    *      ),
+    *      @OA\Response(
+    *          response="200",
+    *          description="Liste des utilisateurs",
+    *          @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/User")),
+    *      )
+    * )
     */
     public function listUser(Request $request, UserRepository $userRepository, SerializerInterface $serializer)
     {
@@ -37,6 +53,22 @@ class UserController extends AbstractController
     
     /**
     * @Route("/{id}", name="show_user", methods={"GET"})
+    * @OA\Get(
+    *     path="/users/{id}",
+    *     security={"bearer"},
+    *     @OA\Parameter(
+    *        name="id",
+    *     in="path",
+    *     description="affichage d'un utilisateur par son id",
+    *     required=true,
+    *     @OA\Schema(type="integer")
+    *      ),
+    *      @OA\Response(
+    *          response="200",
+    *          description="Affiche un utilisateur par son id",
+    *          @OA\JsonContent(ref="#/components/schemas/User"),
+    *      )
+    * )
     */
     public function showUser(User $user, UserRepository $userRepository, SerializerInterface $serializer)
     {
@@ -49,6 +81,15 @@ class UserController extends AbstractController
     
     /**
     * @Route("/add", name="add_user", methods={"POST"})
+    * @OA\Post(
+    *     path="/users",
+    *     security={"bearer"},
+    *     @OA\Response(
+    *          response="201",
+    *          description="Création d'un utilisateur",
+    *          @OA\JsonContent(ref="#/components/schemas/User"),
+    *     )
+    * )
     */
     public function addUser(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
@@ -85,15 +126,24 @@ class UserController extends AbstractController
             }
         }
         
-        /**
-        * @Route("/{id}", name="delete_user", methods={"DELETE"})
-        */
-        public function deleteUser(User $user, EntityManagerInterface $entityManager)
-        {
-            $this->denyAccessUnlessGranted('CAN_DELETE', $user, "Vous n'êtes pas autorisé à supprimer cet utilisateur");
-            $entityManager->remove($user);
-            $entityManager->flush();
-            return new Response(null, 204);
-        }
+    /**
+     * @Route("/{id}", name="delete_user", methods={"DELETE"})
+     * @OA\Delete (
+     *     path="/users",
+     *     security={"bearer"},
+     *     @OA\Response(
+     *          response="204",
+     *          description="Suppression d'un utilisateur",
+     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+     *     )
+     * )
+    */
+    public function deleteUser(User $user, EntityManagerInterface $entityManager)
+    {
+        $this->denyAccessUnlessGranted('CAN_DELETE', $user, "Vous n'êtes pas autorisé à supprimer cet utilisateur");
+        $entityManager->remove($user);
+        $entityManager->flush();
+        return new Response(null, 204);
     }
+}
     

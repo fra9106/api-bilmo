@@ -14,7 +14,7 @@ paths:
         -
           name: page
           in: query
-          description: 'Liste phone (5 par page)'
+          description: 'Liste des produits (5 par page)'
           required: false
           schema:
             type: integer
@@ -27,11 +27,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Phone'
+      security:
+        -
+          scalar: bearer
     post:
       operationId: 'App\Controller\PhoneController::addPhone'
       responses:
         '201':
-          description: 'Creation d''un produit'
+          description: 'Création d''un produit'
           content:
             application/json:
               schema:
@@ -58,19 +61,20 @@ paths:
         -
           name: id
           in: path
-          description: 'Id de la ressource'
+          description: 'Id du produit'
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: 'Affiche un produit par son id'
+          description: 'Affichage d''un produit par son id'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Phone'
-        '404':
-          description: 'La ressource n''existe pas'
+      security:
+        -
+          scalar: bearer
     put:
       operationId: 'App\Controller\PhoneController::updatePhone'
       parameters:
@@ -91,6 +95,74 @@ paths:
       security:
         -
           scalar: bearer
+  /users:
+    get:
+      operationId: 'App\Controller\UserController::listUser'
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Liste des utilisateurs (5 par page)'
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Liste des utilisateurs'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      security:
+        -
+          scalar: bearer
+    post:
+      operationId: 'App\Controller\UserController::addUser'
+      responses:
+        '201':
+          description: 'Création d''un utilisateur'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        -
+          scalar: bearer
+    delete:
+      operationId: 'App\Controller\UserController::deleteUser'
+      responses:
+        '204':
+          description: 'Suppression d''un utilisateur'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+      security:
+        -
+          scalar: bearer
+  '/users/{id}':
+    get:
+      operationId: 'App\Controller\UserController::showUser'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'affichage d''un utilisateur par son id'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Affiche un utilisateur par son id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        -
+          scalar: bearer
 components:
   schemas:
     Phone:
@@ -105,4 +177,24 @@ components:
           type: string
         price:
           type: integer
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        address:
+          type: string
+        postal_code:
+          type: string
+        city:
+          type: string
+        created_at:
+          type: string
+          format: date-time
       type: object
