@@ -50,7 +50,7 @@ class UserController extends AbstractController
     /**
     * @Route("/add", name="add_user", methods={"POST"})
     */
-    public function addUser(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function addUser(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManagerInterface, ValidatorInterface $validator)
     {
         $json = $request->getContent();
         $userConnected = $this->getUser();
@@ -65,8 +65,8 @@ class UserController extends AbstractController
                 return  $this->json($error, 400);
             }
             
-            $em->persist($newUser);
-            $em->flush();
+            $entityManagerInterface->persist($newUser);
+            $entityManagerInterface->flush();
             
             $newUser = [
                 'status' => 201,
@@ -88,11 +88,11 @@ class UserController extends AbstractController
         /**
         * @Route("/{id}", name="delete_user", methods={"DELETE"})
         */
-        public function deleteUser(User $user, EntityManagerInterface $em)
+        public function deleteUser(User $user, EntityManagerInterface $entityManagerInterface)
         {
             $this->denyAccessUnlessGranted('CAN_DELETE', $user, "Vous n'êtes pas autorisé à supprimer cet utilisateur");
-            $em->remove($user);
-            $em->flush();
+            $entityManagerInterface->remove($user);
+            $entityManagerInterface->flush();
             return new Response(null, 204);
         }
     }

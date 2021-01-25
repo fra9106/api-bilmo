@@ -51,7 +51,7 @@ class PhoneController extends AbstractController
     * @Route("/addphone", name="add_phone", methods={"POST"})
     * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour ajouter un produit !")
     */
-    public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManagerInterface, ValidatorInterface $validator)
     {
         $json = $request->getContent();
         try {
@@ -63,8 +63,8 @@ class PhoneController extends AbstractController
                 return  $this->json($error, 400);
             }
             
-            $em->persist($newPhone);
-            $em->flush();
+            $entityManagerInterface->persist($newPhone);
+            $entityManagerInterface->flush();
             
             $newUser = [
                 'status' => 201,
@@ -87,9 +87,9 @@ class PhoneController extends AbstractController
      * @Route("/{id}", name="update_phone", methods={"PUT"})
      * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour modifier ce produit !")
      */
-    public function updatePhone(Phone $phone, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $em)
+    public function updatePhone(Phone $phone, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManagerInterface)
     {
-        $updatePhone = $em->getRepository(Phone::class)->find($phone->getId());
+        $updatePhone = $entityManagerInterface->getRepository(Phone::class)->find($phone->getId());
         $data = json_decode($request->getContent());
         foreach ($data as $key => $value){
             if($key && !empty($value)) {
@@ -106,7 +106,7 @@ class PhoneController extends AbstractController
                 
             ]);
         }
-        $em->flush();
+        $entityManagerInterface->flush();
         $data = [
             'status' => 200,
             'message' => 'Produit modifié !'
@@ -118,10 +118,10 @@ class PhoneController extends AbstractController
         * @Route("/{id}", name="delete_phone", methods={"DELETE"})
         * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour supprimer ce produit !")
         */
-        public function deletePhone(Phone $phone, EntityManagerInterface $em, ValidatorInterface $validator)
+        public function deletePhone(Phone $phone, EntityManagerInterface $entityManagerInterface)
         {
-            $em->remove($phone);
-            $em->flush();
+            $entityManagerInterface->remove($phone);
+            $entityManagerInterface->flush();
             return new Response(null, 204);
         }
 }
