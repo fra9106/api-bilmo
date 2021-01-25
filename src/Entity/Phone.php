@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PhoneRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
+ * @OA\Schema()
  */
 class Phone
 {
@@ -15,30 +18,48 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"phone:read"})
+     * @OA\Property(type="integer")
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"phone:read"})
+     * @Assert\NotBlank(message="Le modèle du produit est obligatoire !")
+     * @Assert\Length(min=4, max=255, minMessage="Le modèle du produit doit avoir plus de 4 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $model;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"phone:read"})
+     * @Assert\NotBlank(message="La couleur du produit est obligatoire !")
+     * @Assert\Length(min=4, max=255, minMessage="La couleur du produit doit avoir plus de 2 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $color;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"phone:read"})
+     * @Assert\NotBlank(message="La description du produit est obligatoire !")
+     * @Assert\Length(min=4, max=255, minMessage="La description du produit doit avoir plus de 10 caractères !")
+     * @OA\Property(type="string")
+     * @var string
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"phone:read"})
+     * @Assert\NotBlank(message="Le prix du produit est obligatoire !")
+     * @OA\Property(type="integer")
+     * @var int
      */
     private $price;
 
