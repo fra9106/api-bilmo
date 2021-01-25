@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: api-bilmo
+  version: '0.1'
+servers:
+  -
+    url: 'http://localhost:8000/api'
+    description: 'Api BileMo'
+paths:
+  /phones:
+    get:
+      operationId: 'App\Controller\PhoneController::listPhone'
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Liste phone (5 par page)'
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Liste des produits'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phone'
+    post:
+      operationId: 'App\Controller\PhoneController::addPhone'
+      responses:
+        '201':
+          description: 'Creation d''un produit'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+      security:
+        -
+          scalar: bearer
+    delete:
+      operationId: 'App\Controller\PhoneController::deletePhone'
+      responses:
+        '204':
+          description: 'Suppression d''un produit'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+      security:
+        -
+          scalar: bearer
+  '/phones/{id}':
+    get:
+      operationId: 'App\Controller\PhoneController::showPhone'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Id de la ressource'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Affiche un produit par son id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        '404':
+          description: 'La ressource n''existe pas'
+    put:
+      operationId: 'App\Controller\PhoneController::updatePhone'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Modifie un produit'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Le phone'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+      security:
+        -
+          scalar: bearer
+components:
+  schemas:
+    Phone:
+      properties:
+        id:
+          type: integer
+        model:
+          type: string
+        color:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+      type: object

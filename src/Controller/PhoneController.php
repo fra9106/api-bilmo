@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api/phones")
@@ -22,7 +23,22 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 class PhoneController extends AbstractController
 {
     /**
-     *  @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"}, priority= -1)
+     * @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"}, priority= -1)
+     * @OA\Get(
+     *     path="/phones",
+     *     @OA\Parameter(
+     *        name="page",
+     *     in="query",
+     *     description="Liste phone (5 par page)",
+     *     required=false,
+     *     @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="Liste des produits",
+     *          @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Phone")),
+     *      )
+     * )
      */
     public function listPhone(Request $request,PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
@@ -37,6 +53,21 @@ class PhoneController extends AbstractController
 
     /**
      * @Route("/{id}", name="show_phone", methods={"GET"})
+     * @OA\Get(
+     *     path="/phones/{id}",
+     *     @OA\Parameter(
+     *        name="id",
+     *     in="path",
+     *     description="Id de la ressource",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="Affiche un produit par son id",
+     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+     *      )
+     * )
      */
     public function showPhone(Phone $phone, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
@@ -50,6 +81,15 @@ class PhoneController extends AbstractController
     /**
     * @Route("/addphone", name="add_phone", methods={"POST"})
     * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour ajouter un produit !")
+    * @OA\Post(
+     *     path="/phones",
+     *     security={"bearer"},
+     *     @OA\Response(
+     *          response="201",
+     *          description="Creation d'un produit",
+     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+     *     )
+     * )
     */
     public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
@@ -86,6 +126,22 @@ class PhoneController extends AbstractController
     /**
      * @Route("/{id}", name="update_phone", methods={"PUT"})
      * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour modifier ce produit !")
+     * @OA\PUT(
+     *     path="/phones/{id}",
+     *     security={"bearer"},
+     *     @OA\Parameter(
+     *        name="id",
+     *     in="path",
+     *     description="Modifie un produit",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *      ),
+     *      @OA\Response(
+     *          response="200",
+     *          description="Le phone",
+     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+     *      )
+     * )
      */
     public function updatePhone(Phone $phone, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager)
     {
@@ -117,6 +173,15 @@ class PhoneController extends AbstractController
     /**
         * @Route("/{id}", name="delete_phone", methods={"DELETE"})
         * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour supprimer ce produit !")
+        * @OA\Delete (
+     *     path="/phones",
+     *     security={"bearer"},
+     *     @OA\Response(
+     *          response="204",
+     *          description="Suppression d'un produit",
+     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+     *     )
+     * )
         */
         public function deletePhone(Phone $phone, EntityManagerInterface $entityManager)
         {
