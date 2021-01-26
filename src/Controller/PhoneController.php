@@ -128,7 +128,7 @@ class PhoneController extends AbstractController
     /**
      * @Route("/{id}", name="update_phone", methods={"PUT"})
      * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour modifier ce produit !")
-     * @OA\PUT(
+     * @OA\Put(
      *     path="/phones/{id}",
      *     security={"bearer"},
      *     @OA\Parameter(
