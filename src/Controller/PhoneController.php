@@ -15,6 +15,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use OpenApi\Annotations as OA;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * @Route("/api/phones")
@@ -41,15 +43,24 @@ class PhoneController extends AbstractController
      *      )
      * )
      */
-    public function listPhone(Request $request,PhoneRepository $phoneRepository, SerializerInterface $serializer)
+    public function listPhone(Request $request,PhoneRepository $phoneRepository, SerializerInterface $serializer, CacheInterface $cacheInterface)
     {
         $page = $request->query->get('page');
         $limit = 5;
         $phones = $phoneRepository->findAllPhones($page, $limit);
         $data = $serializer->serialize($phones, 'json',['groups' => 'phone:read']);
+        $cache = $cacheInterface->get('phones'. $data, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+        });
+        
+        dd($cache);
+        
         $response = new JsonResponse($data, 200, [], true);
-
         return $response;
+
+        
+
+        
     }
 
     /**
