@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ShopRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeInterface;
+use OpenApi\Annotations as OA;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Repository\ShopRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=ShopRepository::class)
+ * @OA\Schema()
  */
 class Shop implements UserInterface
 {
@@ -19,12 +21,16 @@ class Shop implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"shop:read"})
+     * @OA\Property(type="integer")
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"shop:read"})
+     * @OA\Property(type="string")
+     * @var string
      */
     private $email;
 
@@ -42,24 +48,32 @@ class Shop implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"shop:read"})
+     * @OA\Property(type="string")
+     * @var string
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"shop:read"})
+     * @OA\Property(type="string")
+     * @var string
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"shop:read"})
+     * @OA\Property(type="string")
+     * @var string
      */
     private $city;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"shop:read"})
+     * @OA\Property(type="string", format="date-time")
+     * @var DateTimeInterface 
      */
     private $arrival_date;
 

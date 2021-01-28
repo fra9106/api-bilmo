@@ -151,6 +151,31 @@
                 ]
             }
         },
+        "/shops": {
+            "get": {
+                "operationId": "App\\Controller\\ShopController::listShops",
+                "responses": {
+                    "200": {
+                        "description": "Liste des magasins",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Shop"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "scalar": "bearer"
+                    }
+                ]
+            }
+        },
         "/users": {
             "get": {
                 "operationId": "App\\Controller\\UserController::listUser",
@@ -279,6 +304,30 @@
                     },
                     "price": {
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Shop": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "arrival_date": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "type": "object"
