@@ -43,24 +43,20 @@ class PhoneController extends AbstractController
      *      )
      * )
      */
-    public function listPhone(Request $request,PhoneRepository $phoneRepository, SerializerInterface $serializer, CacheInterface $cacheInterface)
+    public function listPhone(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer, CacheInterface $cacheInterface)
     {
         $page = $request->query->get('page');
         $limit = 5;
         $phones = $phoneRepository->findAllPhones($page, $limit);
-        $data = $serializer->serialize($phones, 'json',['groups' => 'phone:read']);
-        $cache = $cacheInterface->get('phones'. $data, function (ItemInterface $item) {
-            $item->expiresAfter(3600);
-        });
-        
-        dd($cache);
-        
+        $data = $serializer->serialize($phones, 'json', ['groups' => 'phone:read']);
+
+        /*$cache = $cacheInterface->get('phones'. $data , function (ItemInterface $item){
+                        $item->expiresAfter(3600);
+                    });
+                    dd($cache);*/
+
         $response = new JsonResponse($data, 200, [], true);
         return $response;
-
-        
-
-        
     }
 
     /**
@@ -85,56 +81,55 @@ class PhoneController extends AbstractController
     public function showPhone(Phone $phone, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
         $phone = $phoneRepository->find($phone->getId());
-        $data = $serializer->serialize($phone, 'json',['groups' => 'phone:read']);
+        $data = $serializer->serialize($phone, 'json', ['groups' => 'phone:read']);
         $response = new JsonResponse($data, 200, [], true);
 
         return $response;
     }
 
     /**
-    * @Route("/addphone", name="add_phone", methods={"POST"})
-    * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour ajouter un produit !")
-    * @OA\Post(
-    *     path="/phones",
-    *     security={"bearer"},
-    *     @OA\Response(
-    *          response="201",
-    *          description="Création d'un produit",
-    *          @OA\JsonContent(ref="#/components/schemas/Phone"),
-    *     )
-    * )
-    */
+     * @Route("/addphone", name="add_phone", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN", statusCode=403, message="Vous n'avez pas les droits administrateur pour ajouter un produit !")
+     * @OA\Post(
+     *     path="/phones",
+     *     security={"bearer"},
+     *     @OA\Response(
+     *          response="201",
+     *          description="Création d'un produit",
+     *          @OA\JsonContent(ref="#/components/schemas/Phone"),
+     *     )
+     * )
+     */
     public function addPhone(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $json = $request->getContent();
         try {
             $newPhone = $serializer->deserialize($json, Phone::class, 'json');
-            
+
             $error = $validator->validate($newPhone);
-            
+
             if (count($error) > 0) {
                 return  $this->json($error, 400);
             }
-            
+
             $entityManager->persist($newPhone);
             $entityManager->flush();
-            
+
             $newUser = [
                 'status' => 201,
                 'message' => 'Le nouveau produit a bien été ajouté !'
             ];
-            
-            return $this->json($newUser, 201, [], [ 
+
+            return $this->json($newUser, 201, [], [
                 'groups' => 'phone:read'
-                ]);
-                
-            }catch(NotEncodableValueException $e ) {
-                return $this->json([
-                    'status' => 400,
-                    'message' => $e->getMessage() 
-                ],400);
-            }
+            ]);
+        } catch (NotEncodableValueException $e) {
+            return $this->json([
+                'status' => 400,
+                'message' => $e->getMessage()
+            ], 400);
         }
+    }
 
     /**
      * @Route("/{id}", name="update_phone", methods={"PUT"})
@@ -160,19 +155,19 @@ class PhoneController extends AbstractController
     {
         $updatePhone = $entityManager->getRepository(Phone::class)->find($phone->getId());
         $data = json_decode($request->getContent());
-        foreach ($data as $key => $value){
-            if($key && !empty($value)) {
+        foreach ($data as $key => $value) {
+            if ($key && !empty($value)) {
                 $name = ucfirst($key);
-                $set = 'set'.$name;
+                $set = 'set' . $name;
                 $updatePhone->$set($value);
             }
         }
         $errors = $validator->validate($updatePhone);
-        if(count($errors)) {
+        if (count($errors)) {
             $errors = $serializer->serialize($errors, 'json');
             return new Response($errors, 500, [
                 'Content-Type' => 'application/json',
-                
+
             ]);
         }
         $entityManager->flush();
@@ -195,7 +190,7 @@ class PhoneController extends AbstractController
      *          @OA\JsonContent(ref="#/components/schemas/Phone"),
      *     )
      * )
-        */
+     */
     public function deletePhone(Phone $phone, EntityManagerInterface $entityManager)
     {
         $entityManager->remove($phone);
