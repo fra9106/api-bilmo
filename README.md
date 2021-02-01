@@ -60,7 +60,7 @@ user Shop :
 ```
 - PHP : 8.0.1
 - MySQL : 8.0.21
-- Symfony : 5.2 
+- Symfony : 5.2.1
 - Composer : 2.0.8
 - Codacy
 - Github

@@ -176,32 +176,6 @@
                 ]
             }
         },
-        "/shops/{id}": {
-            "get": {
-                "operationId": "App\\Controller\\ShopController::showShop",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Id du magasin",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Magasin par son id"
-                    }
-                },
-                "security": [
-                    {
-                        "scalar": "bearer"
-                    }
-                ]
-            }
-        },
         "/users": {
             "get": {
                 "operationId": "App\\Controller\\UserController::listUser",

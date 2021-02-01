@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api/shops")
@@ -17,7 +18,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ShopController extends AbstractController
 {
     /**
-     *  @Route("/", name="list_shops", methods={"GET"})
+     * @Route("/", name="list_shops", methods={"GET"})
+     * @OA\Get(
+     *     path="/shops",
+     *     security={"bearer"},
+     *     @OA\Response(
+     *          response="200",
+     *          description="Liste des magasins",
+     *          @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Shop")),
+     *      )
+     * )
      */
     public function listShops(ShopRepository $shopRepository, SerializerInterface $serializer)
     {
@@ -30,6 +40,22 @@ class ShopController extends AbstractController
 
     /**
      * @Route("/{id}", name="show_shop", methods={"GET"})
+     * @OA\Get(
+     *     path="/shops/{id}",
+     *     security={"bearer"},
+     *     @OA\Parameter(
+     *        name="id",
+     *     in="path",
+     *     description="Id du magasin",
+     *     required=true,
+     *     @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="Magasin par son id",
+     *          @OA\Items(ref="#/components/schemas/Shop")),
+     *      )
+     * )
      */
     public function showShop(Shop $shop, ShopRepository $phoneRepository, SerializerInterface $serializer)
     {
