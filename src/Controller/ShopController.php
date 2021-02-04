@@ -7,9 +7,10 @@ use App\Repository\ShopRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OpenApi\Annotations as OA;
+use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
 
 /**
  * @Route("/api/shops")
@@ -32,7 +33,7 @@ class ShopController extends AbstractController
     public function listShops(ShopRepository $shopRepository, SerializerInterface $serializer)
     {
         $shops = $shopRepository->findAll();
-        $data = $serializer->serialize($shops, 'json', ['groups' => 'shop:read']);
+        $data = $serializer->serialize($shops, 'json', SerializationContext::create()->setGroups(array('detail')));
         $response = new JsonResponse($data, 200, [], true);
 
         return $response;
@@ -60,7 +61,7 @@ class ShopController extends AbstractController
     public function showShop(Shop $shop, ShopRepository $phoneRepository, SerializerInterface $serializer)
     {
         $shop = $phoneRepository->find($shop->getId());
-        $data = $serializer->serialize($shop, 'json',['groups' => 'shop:read']);
+        $data = $serializer->serialize($shop, 'json', SerializationContext::create()->setGroups(array('detail')));
         $response = new JsonResponse($data, 200, [], true);
 
         return $response;

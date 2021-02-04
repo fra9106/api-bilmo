@@ -25,7 +25,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @Hateoas\Relation(
  *      "self",
  *      href = @Hateoas\Route(
- *          "delete_phone",
+ *          "show_phone",
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),

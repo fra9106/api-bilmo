@@ -8,13 +8,14 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use OpenApi\Annotations as OA;
+use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
 
 /**
 * @Route("/api/users")
@@ -46,7 +47,7 @@ class UserController extends AbstractController
         $page = $request->query->get('page');
         $limit = 5;
         $users = $userRepository->findAllUsers($page, $limit);
-        $data = $serializer->serialize($users, 'json', ['groups' => 'users-list:read']);
+        $data = $serializer->serialize($users, 'json', SerializationContext::create()->setGroups(array('list')));
         $response = new JsonResponse($data, 200, [], true);
         
         return $response;
@@ -74,7 +75,7 @@ class UserController extends AbstractController
     public function showUser(User $user, UserRepository $userRepository, SerializerInterface $serializer)
     {
         $user = $userRepository->find($user->getId());
-        $data = $serializer->serialize($user, 'json',['groups' => 'user:read']);
+        $data = $serializer->serialize($user, 'json', SerializationContext::create()->setGroups(array('detail')));
         $response = new JsonResponse($data, 200, [], true);
         
         return $response;

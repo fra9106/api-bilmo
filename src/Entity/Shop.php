@@ -8,11 +8,22 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ShopRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * @ORM\Entity(repositoryClass=ShopRepository::class)
  * @OA\Schema()
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "show_shop",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
  */
 class Shop implements UserInterface
 {
@@ -20,7 +31,7 @@ class Shop implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="integer")
      * @var int
      */
@@ -28,7 +39,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="string")
      * @var string
      */
@@ -47,7 +58,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="string")
      * @var string
      */
@@ -55,7 +66,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="string")
      * @var string
      */
@@ -63,7 +74,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="string")
      * @var string
      */
@@ -71,7 +82,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="string", format="date-time")
      * @var DateTimeInterface 
      */
@@ -79,7 +90,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="shop", orphanRemoval=true)
-     * @Groups({"shop:read"})
+     * @Serializer\Groups({"detail"})
      */
     private $users;
 
