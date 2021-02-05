@@ -39,12 +39,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "scalar": "bearer"
-                    }
-                ]
+                }
             },
             "post": {
                 "operationId": "App\\Controller\\PhoneController::addPhone",

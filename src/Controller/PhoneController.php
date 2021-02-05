@@ -14,10 +14,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use OpenApi\Annotations as OA;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/api/phones")
@@ -29,7 +28,6 @@ class PhoneController extends AbstractController
      * @Route("/{page<\d+>?1}", name="list_phone", methods={"GET"}, priority= -1)
      * @OA\Get(
      *     path="/phones",
-     *     security={"bearer"},
      *     @OA\Parameter(
      *        name="page",
      *     in="query",
@@ -44,17 +42,14 @@ class PhoneController extends AbstractController
      *      )
      * )
      */
-    public function listPhone(PhoneRepository $phoneRepository, SerializerInterface $serializer, CacheInterface $cacheInterface)
+    public function listPhone(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer, PaginatorInterface $paginator)
     {
-        //$page = $request->query->get('page');
-        //$limit = 5;
+       
+        
         $phones = $phoneRepository->findAll();
-        $data = $serializer->serialize($phones, 'json', SerializationContext::create()->setGroups(array('list')));
 
-        /*$cache = $cacheInterface->get('phones'. $data , function (ItemInterface $item){
-                        $item->expiresAfter(3600);
-                    });
-                    dd($cache);*/
+        $pages = $paginator->paginate( $phones, $request->query->getInt('page', 1), 5);
+        $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
 
         $response = new JsonResponse($data, 200, [], true);
         return $response;
@@ -81,7 +76,6 @@ class PhoneController extends AbstractController
      */
     public function showPhone(Phone $phone, PhoneRepository $phoneRepository, SerializerInterface $serializer)
     {
-        $phone = $phoneRepository->find($phone->getId());
         $data = $serializer->serialize($phone, 'json',SerializationContext::create()->setGroups(array('detail')) );
         $response = new JsonResponse($data, 200, [], true);
 
