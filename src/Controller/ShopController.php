@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OpenApi\Annotations as OA;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/api/shops")
@@ -30,10 +32,12 @@ class ShopController extends AbstractController
      *      )
      * )
      */
-    public function listShops(ShopRepository $shopRepository, SerializerInterface $serializer)
+    public function listShops(Request $request, ShopRepository $shopRepository, SerializerInterface $serializer, PaginatorInterface $paginator)
     {
         $shops = $shopRepository->findAll();
-        $data = $serializer->serialize($shops, 'json', SerializationContext::create()->setGroups(array('detail')));
+
+        $pages = $paginator->paginate( $shops, $request->query->getInt('page', 1), 1);
+        $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
         $response = new JsonResponse($data, 200, [], true);
 
         return $response;
@@ -58,9 +62,8 @@ class ShopController extends AbstractController
      *      )
      * )
      */
-    public function showShop(Shop $shop, ShopRepository $phoneRepository, SerializerInterface $serializer)
+    public function showShop(Shop $shop, SerializerInterface $serializer)
     {
-        $shop = $phoneRepository->find($shop->getId());
         $data = $serializer->serialize($shop, 'json', SerializationContext::create()->setGroups(array('detail')));
         $response = new JsonResponse($data, 200, [], true);
 

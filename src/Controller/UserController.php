@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use OpenApi\Annotations as OA;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
 * @Route("/api/users")
@@ -42,12 +43,12 @@ class UserController extends AbstractController
     *      )
     * )
     */
-    public function listUser(Request $request, UserRepository $userRepository, SerializerInterface $serializer)
+    public function listUser(Request $request, UserRepository $userRepository, SerializerInterface $serializer, PaginatorInterface $paginator)
     {
-        $page = $request->query->get('page');
-        $limit = 5;
-        $users = $userRepository->findAllUsers($page, $limit);
-        $data = $serializer->serialize($users, 'json', SerializationContext::create()->setGroups(array('list')));
+        $users = $userRepository->findAll();
+
+        $pages = $paginator->paginate( $users, $request->query->getInt('page', 1), 4);
+        $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
         $response = new JsonResponse($data, 200, [], true);
         
         return $response;

@@ -41,7 +41,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"detail"})
      * @OA\Property(type="integer")
      * @var int
      */
@@ -49,7 +49,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=180)
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"detail"})
      * @Assert\NotBlank(message=" Merci d'entrer votre email !")
      * @Assert\Email(message="email non valide !")
      * @OA\Property(type="string")
@@ -99,7 +99,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"detail", "list"})
      * @Assert\NotBlank(message=" Merci d'entrer le nom de votre ville !")
      * @Assert\Length(min=4, max=255, minMessage="Le nom de votre ville doit comporter plus de 3 caractères !")
      * @OA\Property(type="string")

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aae9671577e7df6e9384ff4c33c19ba6",
+    "content-hash": "87317e3ffe1ecf5b4260df8a5bf2d0aa",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -3858,7 +3858,7 @@
         },
         {
             "name": "symfony/expression-language",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/expression-language.git",
@@ -3902,7 +3902,7 @@
             "description": "Provides an engine that can compile and evaluate expressions",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/expression-language/tree/v5.2.2"
+                "source": "https://github.com/symfony/expression-language/tree/v5.2.3"
             },
             "funding": [
                 {

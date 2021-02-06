@@ -18,6 +18,7 @@ use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
 use Knp\Component\Pager\PaginatorInterface;
 
+
 /**
  * @Route("/api/phones")
  */
@@ -44,11 +45,9 @@ class PhoneController extends AbstractController
      */
     public function listPhone(Request $request, PhoneRepository $phoneRepository, SerializerInterface $serializer, PaginatorInterface $paginator)
     {
-       
-        
         $phones = $phoneRepository->findAll();
 
-        $pages = $paginator->paginate( $phones, $request->query->getInt('page', 1), 5);
+        $pages = $paginator->paginate( $phones, $request->query->getInt('page', 1), 4);
         $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
 
         $response = new JsonResponse($data, 200, [], true);
@@ -74,7 +73,7 @@ class PhoneController extends AbstractController
      *      )
      * )
      */
-    public function showPhone(Phone $phone, PhoneRepository $phoneRepository, SerializerInterface $serializer)
+    public function showPhone(Phone $phone, SerializerInterface $serializer)
     {
         $data = $serializer->serialize($phone, 'json',SerializationContext::create()->setGroups(array('detail')) );
         $response = new JsonResponse($data, 200, [], true);

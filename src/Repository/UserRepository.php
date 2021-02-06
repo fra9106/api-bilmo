@@ -20,12 +20,4 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findAllUsers($page, $limit)
-    {
-        $query = $this->createQueryBuilder('u')
-            ->getQuery()
-            ->setFirstResult(($page - 1) * $limit)
-            ->setMaxResults($limit);
-        return new Paginator($query);
-    }
 }

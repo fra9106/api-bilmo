@@ -22,7 +22,18 @@ use JMS\Serializer\Annotation as Serializer;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),
+ *      embedded = @Hateoas\Embedded("expr(object.getUsers())"),
  *      exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
+ * 
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "show_shop",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = "list")
  * )
  */
 class Shop implements UserInterface
@@ -58,7 +69,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"detail", "list"})
      * @OA\Property(type="string")
      * @var string
      */
@@ -74,7 +85,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"detail", "list"})
      * @OA\Property(type="string")
      * @var string
      */
@@ -90,7 +101,7 @@ class Shop implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="shop", orphanRemoval=true)
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"list"})
      */
     private $users;
 
