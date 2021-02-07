@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,6 +24,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),
+ *      embedded = @Hateoas\Embedded("expr(object.getPhones())"),
  *      exclusion = @Hateoas\Exclusion(groups = "detail")
  * )
  * 
@@ -121,6 +124,16 @@ class User
      */
     private $shop;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Phone::class, inversedBy="users")
+     */
+    private $phones;
+
+    public function __construct()
+    {
+        $this->phones = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -218,6 +231,30 @@ class User
     public function setShop(?Shop $shop): self
     {
         $this->shop = $shop;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Phone[]
+     */
+    public function getPhones(): Collection
+    {
+        return $this->phones;
+    }
+
+    public function addPhone(Phone $phone): self
+    {
+        if (!$this->phones->contains($phone)) {
+            $this->phones[] = $phone;
+        }
+
+        return $this;
+    }
+
+    public function removePhone(Phone $phone): self
+    {
+        $this->phones->removeElement($phone);
 
         return $this;
     }
