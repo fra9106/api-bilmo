@@ -33,6 +33,29 @@ use JMS\Serializer\Annotation as Serializer;
  *      ),
  *      exclusion = @Hateoas\Exclusion(groups = "list")
  * )
+ * @Hateoas\Relation(
+ *     "create",
+ *     href = @Hateoas\Route("add_phone",
+ *     absolute = true
+ *     ),
+ *     exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
+ * @Hateoas\Relation(
+ *     "update",
+ *     href = @Hateoas\Route("update_phone",
+ *     parameters = { "id" = "expr(object.getId())" },
+ *     absolute = true
+ *     ),
+ *     exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
+ * @Hateoas\Relation(
+ *     "delete",
+ *     href = @Hateoas\Route("delete_phone",
+ *     parameters = { "id" = "expr(object.getId())" },
+ *     absolute = true
+ *     ),
+ *     exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
  */
 class Phone
 {

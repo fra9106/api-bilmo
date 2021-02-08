@@ -37,6 +37,21 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *      ),
  *      exclusion = @Hateoas\Exclusion(groups = "list")
  * )
+ * @Hateoas\Relation(
+ *     "create",
+ *     href = @Hateoas\Route("add_user",
+ *     absolute = true
+ *     ),
+ *     exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
+ * @Hateoas\Relation(
+ *     "delete",
+ *     href = @Hateoas\Route("delete_user",
+ *     parameters = { "id" = "expr(object.getId())" },
+ *     absolute = true
+ *     ),
+ *     exclusion = @Hateoas\Exclusion(groups = "detail")
+ * )
  */
 class User
 {
