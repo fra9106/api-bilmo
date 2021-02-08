@@ -12,7 +12,7 @@ class UserVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['CAN_DELETE'])
+        return in_array($attribute, ['CAN_DELETE', 'GET_USER'])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -28,6 +28,12 @@ class UserVoter extends Voter
         switch ($attribute) {
             case 'CAN_DELETE':
                 return $subject->getShop() === $user;
+                break;
+            case 'GET_USER':
+                // logic to determine if the user can VIEW
+                // return true or false
+                return $subject->getShop() === $user;
+                break;
         }
 
         return false;

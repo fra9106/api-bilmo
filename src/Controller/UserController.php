@@ -45,8 +45,9 @@ class UserController extends AbstractController
     */
     public function listUser(Request $request, UserRepository $userRepository, SerializerInterface $serializer, PaginatorInterface $paginator)
     {
-        $users = $userRepository->findAll();
 
+        $users = $userRepository->findAll();
+        
         $pages = $paginator->paginate( $users, $request->query->getInt('page', 1), 4);
         $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
         $response = new JsonResponse($data, 200, [], true);
@@ -75,6 +76,7 @@ class UserController extends AbstractController
     */
     public function showUser(User $user, UserRepository $userRepository, SerializerInterface $serializer)
     {
+        $this->denyAccessUnlessGranted('GET_USER', $user, "Vous n'êtes pas autorisé à choper cet utilisateur");
         $user = $userRepository->find($user->getId());
         $data = $serializer->serialize($user, 'json', SerializationContext::create()->setGroups(array('detail')));
         $response = new JsonResponse($data, 200, [], true);
