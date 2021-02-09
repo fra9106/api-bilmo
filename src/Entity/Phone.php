@@ -82,7 +82,7 @@ class Phone
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="La couleur du produit est obligatoire !")
-     * @Assert\Length(min=4, max=255, minMessage="La couleur du produit doit avoir plus de 2 caractères !")
+     * @Assert\Length(min=2, max=255, minMessage="La couleur du produit doit avoir plus de 2 caractères !")
      * @Serializer\Groups({"detail", "list"})
      * @OA\Property(type="string")
      * @var string
@@ -92,7 +92,7 @@ class Phone
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank(message="La description du produit est obligatoire !")
-     * @Assert\Length(min=4, max=255, minMessage="La description du produit doit avoir plus de 10 caractères !")
+     * @Assert\Length(min=10, max=255, minMessage="La description du produit doit avoir plus de 10 caractères !")
      * @Serializer\Groups({"detail"})
      * @OA\Property(type="string")
      * @var string

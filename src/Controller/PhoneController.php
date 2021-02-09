@@ -114,9 +114,8 @@ class PhoneController extends AbstractController
                 'message' => 'Le nouveau produit a bien été ajouté !'
             ];
 
-            return $this->json($newUser, 201, [], [
-                'groups' => 'phone:read'
-            ]);
+            return $this->json($newUser);
+
         } catch (NotEncodableValueException $e) {
             return $this->json([
                 'status' => 400,

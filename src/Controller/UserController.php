@@ -76,7 +76,7 @@ class UserController extends AbstractController
     */
     public function showUser(User $user, UserRepository $userRepository, SerializerInterface $serializer)
     {
-        $this->denyAccessUnlessGranted('GET_USER', $user, "Vous n'êtes pas autorisé à choper cet utilisateur");
+        $this->denyAccessUnlessGranted('GET_USER', $user, "Vous n'êtes pas autorisé à consulter la fiche de cet utilisateur");
         $user = $userRepository->find($user->getId());
         $data = $serializer->serialize($user, 'json', SerializationContext::create()->setGroups(array('detail')));
         $response = new JsonResponse($data, 200, [], true);
@@ -119,17 +119,15 @@ class UserController extends AbstractController
                 'message' => 'Le nouvel utilisateur a bien été ajouté !'
             ];
             
-            return $this->json($newUser, 201, [], [ 
-                'groups' => 'user:read'
-                ]);
+            return $this->json($newUser);
                 
-            }catch(NotEncodableValueException $e ) {
-                return $this->json([
-                    'status' => 400,
-                    'message' => $e->getMessage() 
-                ],400);
+        } catch (NotEncodableValueException $e ) {
+            return $this->json([
+                'status' => 400,
+                'message' => $e->getMessage() 
+                ], 400);
             }
-        }
+    }
         
     /**
      * @Route("/{id}", name="delete_user", methods={"DELETE"})

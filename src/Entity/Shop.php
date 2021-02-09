@@ -22,7 +22,6 @@ use JMS\Serializer\Annotation as Serializer;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),
- *      embedded = @Hateoas\Embedded("expr(object.getUsers())"),
  *      exclusion = @Hateoas\Exclusion(groups = "detail")
  * )
  * 
@@ -33,6 +32,7 @@ use JMS\Serializer\Annotation as Serializer;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),
+ *      embedded = @Hateoas\Embedded("expr(object.getUsers())"),
  *      exclusion = @Hateoas\Exclusion(groups = "list")
  * )
  */
@@ -101,7 +101,6 @@ class Shop implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="shop", orphanRemoval=true)
-     * @Serializer\Groups({"list"})
      */
     private $users;
 

@@ -99,7 +99,7 @@ class User
      * @ORM\Column(type="string", length=255)
      * @Serializer\Groups({"detail"})
      * @Assert\NotBlank(message=" Merci d'entrer votre adresse !")
-     * @Assert\Length(min=4, max=255, minMessage="Votre adresse doit comporter plus de 10 caractères !")
+     * @Assert\Length(min=10, max=255, minMessage="Votre adresse doit comporter plus de 10 caractères !")
      * @OA\Property(type="string")
      * @var string
      */
@@ -119,7 +119,7 @@ class User
      * @ORM\Column(type="string", length=100)
      * @Serializer\Groups({"detail", "list"})
      * @Assert\NotBlank(message=" Merci d'entrer le nom de votre ville !")
-     * @Assert\Length(min=4, max=255, minMessage="Le nom de votre ville doit comporter plus de 3 caractères !")
+     * @Assert\Length(min=3, max=255, minMessage="Le nom de votre ville doit comporter plus de 3 caractères !")
      * @OA\Property(type="string")
      * @var string
      */
