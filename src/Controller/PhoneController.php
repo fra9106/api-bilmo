@@ -47,7 +47,7 @@ class PhoneController extends AbstractController
     {
         $phones = $phoneRepository->findAll();
 
-        $pages = $paginator->paginate( $phones, $request->query->getInt('page', 1), 4);
+        $pages = $paginator->paginate( $phones, $request->query->getInt('page', 1), 5);
         $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
 
         $response = new JsonResponse($data, 200, [], true);

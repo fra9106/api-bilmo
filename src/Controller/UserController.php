@@ -48,7 +48,7 @@ class UserController extends AbstractController
 
         $users = $userRepository->findAll();
         
-        $pages = $paginator->paginate( $users, $request->query->getInt('page', 1), 4);
+        $pages = $paginator->paginate( $users, $request->query->getInt('page', 1), 5);
         $data = $serializer->serialize($pages->getItems(), 'json', SerializationContext::create()->setGroups(array('list')));
         $response = new JsonResponse($data, 200, [], true);
         
